@@ -25,6 +25,7 @@ Group:		Base/Kernel
 Source0:	http://pld.skibi.eu/%{name}_linux_2.6.%{version}.tar.gz
 # Source0-md5:	0c904bb2433699bc0e2f1d86c45a6b22
 URL:		http://www.realtek.com/products/productsView.aspx?Langid=1&PNid=21&PFid=48&Level=5&Conn=4&ProdID=226
+Patch0:         rtl8192se-install.patch 
 BuildRequires:	kernel%{_alt_kernel}-module-build >= 3:2.6.20
 BuildRequires:	rpmbuild(macros) >= 1.153
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -38,6 +39,7 @@ Ten pakiet zawiera modul + firmware dla sterownika rtl8192se pci.
 
 %prep
 %setup -q -n %{name}_linux_2.6.%{version}
+%patch0 -p0
 
 %build
 cd HAL/rtl8192
