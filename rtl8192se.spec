@@ -10,7 +10,7 @@
 #    will rejected most forwarded e-mails. Use gmail or some other mail
 #    service that does not check SPF.
 
-%define         jadro 2.6.33.5-1
+%define         kernel 2.6.33.5-1
 %define         pname rtl8192se
 %define         ver %{version}
 Summary:	Firmware for the RTL8192SE chipset
@@ -22,11 +22,12 @@ Group:		Base/Kernel
 
 #rtl8192se_linux_2.6.0017.0507.2010.tar.gzProblems in TW local tar.gz
 #Source0:	ftp://WebUser:pGL7E6v@202.134.71.21/cn/wlan/rtl8192se_linux_2.6.%{version}.tar.gz
-Source0:	%{name}_linux_2.6.%{version}.tar.gz
+Source0:	http://pld.skibi.eu/%{name}_linux_2.6.%{version}.tar.gz
+
 # Source0-md5:	0c904bb2433699bc0e2f1d86c45a6b22
 
-#kernel scripts for %{jadro}
-Source1:	kernel_compile.tar.gz
+#kernel scripts for %{kernel}
+Source1:	http://pld.skibi.eu/kernel_compile.tar.gz
 # Source1-md5:	30f890430a2220151cf2d439546a7db1
 
 
@@ -55,17 +56,16 @@ mv rtl8192se_linux_2.6.%{ver} mod
 cd mod
 %patch0 -p1
 %{__make} all
-#cd ..
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/lib/firmware/%{jadro}/
+install -d $RPM_BUILD_ROOT/lib/firmware/%{kernel}/
 
-cp -a mod/firmware/* $RPM_BUILD_ROOT/lib/firmware/%{jadro}/
-rm -v $RPM_BUILD_ROOT/lib/firmware/%{jadro}/RTL8192SE/*.txt
+cp -a mod/firmware/* $RPM_BUILD_ROOT/lib/firmware/%{kernel}/
+rm -v $RPM_BUILD_ROOT/lib/firmware/%{kernel}/RTL8192SE/*.txt
 
-install -d $RPM_BUILD_ROOT/lib/modules/%{jadro}/kernel/drivers/net/wireless
-cp -a mod/HAL/rtl8192/r8192se_pci.ko $RPM_BUILD_ROOT/lib/modules/%{jadro}/kernel/drivers/net/wireless/
+install -d $RPM_BUILD_ROOT/lib/modules/%{kernel}/kernel/drivers/net/wireless
+cp -a mod/HAL/rtl8192/r8192se_pci.ko $RPM_BUILD_ROOT/lib/modules/%{kernel}/kernel/drivers/net/wireless/
 
 install -d $RPM_BUILD_ROOT%{_sysconfdir}/realtek
 cp -a mod/realtek/* $RPM_BUILD_ROOT%{_sysconfdir}/realtek/
@@ -78,11 +78,11 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc mod/firmware/RTL8192SE/Realtek-Firmware-License.txt
 %doc mod/readme.txt
-/lib/firmware/%{jadro}/*
-/lib/modules/%{jadro}/kernel/drivers/net/wireless/*
+/lib/firmware/%{kernel}/*
+/lib/modules/%{kernel}/kernel/drivers/net/wireless/*
 %{_sysconfdir}/realtek/*
 %post
-%depmod %{jadro}
+%depmod %{kernel}
 
 %postun
-%depmod %{jadro}
+%depmod %{kernel}
