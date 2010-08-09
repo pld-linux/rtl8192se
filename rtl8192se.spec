@@ -8,17 +8,23 @@ Release:	0
 License:	GPL
 Group:		Base/Kernel
 
-#rtl8192se_linux_2.6.0017.0507.2010.tar.gz
-Source0:	ftp://WebUser:pGL7E6v@202.134.71.21/cn/wlan/rtl8192se_linux_2.6.%{version}.tar.gz
-Source1:	kernel_compile.tar.gz
-
+#rtl8192se_linux_2.6.0017.0507.2010.tar.gzProblems in TW local tar.gz 
+#Source0:	ftp://WebUser:pGL7E6v@202.134.71.21/cn/wlan/rtl8192se_linux_2.6.%{version}.tar.gz
+Source0:	rtl8192se_linux_2.6.%{version}.tar.gz
 # Source0-md5:	0c904bb2433699bc0e2f1d86c45a6b22
+
+#kernel scripts for %{jadro}
+Source1:  	kernel_compile.tar.gz
+# Source1-md5:	30f890430a2220151cf2d439546a7db1
+
+
 URL:		http://www.realtek.com/products/productsView.aspx?Langid=1&PNid=21&PFid=48&Level=5&Conn=4&ProdID=226
 #BuildArch:	noarch
 BuildRequires:  rpmbuild(macros) >= 1.153
 BuildRequires:  kernel%{_alt_kernel}-module-build >= 3:2.6.33.0}
 
 Patch0:         %{pname}-install.patch
+
 BuildRoot:	%{tmpdir}/%{pname}-root-%(id -u -n)
 
 %description
@@ -29,6 +35,9 @@ Ten pakiet zawiera modul + firmware dla sterownika rtl8192se pci.
 
 %prep
 %setup -qc
+cp %{SOURCE1} .
+tar -zxf kernel_compile.tar.gz -C /usr/src --overwrite-dir
+
 mv rtl8192se_linux_2.6.%{ver} mod
 cd mod
 %patch0 -p1
@@ -38,6 +47,7 @@ make all
 %install
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT/lib/firmware/%{jadro}/
+
 cp -a mod/firmware/* $RPM_BUILD_ROOT/lib/firmware/%{jadro}/
 rm -v $RPM_BUILD_ROOT/lib/firmware/%{jadro}/RTL8192SE/*.txt
 
