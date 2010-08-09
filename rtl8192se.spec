@@ -32,11 +32,8 @@ Ten pakiet zawiera modul + firmware dla sterownika rtl8192se pci.
 mv rtl8192se_linux_2.6.%{ver} mod
 cd mod
 %patch0 -p1
-#make all
+make all
 cd ..
-
-%build
-%build_kernel_modules -m rtl8192se_pci -C mod/
 
 %install
 rm -rf $RPM_BUILD_ROOT
