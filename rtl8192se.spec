@@ -1,6 +1,6 @@
 #
 # TODO:
-# - package firmware, install, CLEANUPS
+# - cleanups, scripts?, kernel package name/version
 #
 # Conditional build:
 %bcond_without  dist_kernel     # allow non-distribution kernel
@@ -25,12 +25,8 @@ Group:		Base/Kernel
 Source0:	http://pld.skibi.eu/%{name}_linux_2.6.%{version}.tar.gz
 # Source0-md5:	0c904bb2433699bc0e2f1d86c45a6b22
 URL:		http://www.realtek.com/products/productsView.aspx?Langid=1&PNid=21&PFid=48&Level=5&Conn=4&ProdID=226
-BuildRequires:	kernel%{_alt_kernel}-module-build >= 3:2.6.33
+BuildRequires:	kernel%{_alt_kernel}-module-build >= 3:2.6.20
 BuildRequires:	rpmbuild(macros) >= 1.153
-#BuildArch:	noarch
-
-Patch0:		%{pname}-install.patch
-
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -49,16 +45,14 @@ cd HAL/rtl8192
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT/lib/firmware/%{kernel}/
 
-cp -a mod/firmware/* $RPM_BUILD_ROOT/lib/firmware/%{kernel}/
-rm -v $RPM_BUILD_ROOT/lib/firmware/%{kernel}/RTL8192SE/*.txt
+%install_kernel_modules -m HAL/rtl8192/r8192se_pci -d kernel/drivers/net/wireless
 
-install -d $RPM_BUILD_ROOT/lib/modules/%{kernel}/kernel/drivers/net/wireless
-cp -a mod/HAL/rtl8192/r8192se_pci.ko $RPM_BUILD_ROOT/lib/modules/%{kernel}/kernel/drivers/net/wireless/
+install -d $RPM_BUILD_ROOT/lib/firmware
+install firmware/RTL8192SE/*bin $RPM_BUILD_ROOT/lib/firmware
 
-install -d $RPM_BUILD_ROOT%{_sysconfdir}/realtek
-cp -a mod/realtek/* $RPM_BUILD_ROOT%{_sysconfdir}/realtek/
+#install -d $RPM_BUILD_ROOT%{_sysconfdir}/realtek
+#cp -a mod/realtek/* $RPM_BUILD_ROOT%{_sysconfdir}/realtek/
 
 #install -d $RPM_BUILD_ROOT%{_sysconfdir}/realtek/events
 %clean
@@ -72,8 +66,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc mod/firmware/RTL8192SE/Realtek-Firmware-License.txt
-%doc mod/readme.txt
-/lib/firmware/%{kernel}/*
-/lib/modules/%{kernel}/kernel/drivers/net/wireless/*
-%{_sysconfdir}/realtek/*
+%doc firmware/RTL8192SE/Realtek-Firmware-License.txt readme.txt
+/lib/firmware/*bin
+/lib/modules/%{_kernel_ver}/kernel/drivers/net/wireless/*ko*
+#{_sysconfdir}/realtek/*
