@@ -10,6 +10,7 @@ Group:		Base/Kernel
 
 #rtl8192se_linux_2.6.0017.0507.2010.tar.gz
 Source0:	ftp://WebUser:pGL7E6v@202.134.71.21/cn/wlan/rtl8192se_linux_2.6.%{version}.tar.gz
+Source1:	kernel_compile.tar.gz
 
 # Source0-md5:	0c904bb2433699bc0e2f1d86c45a6b22
 URL:		http://www.realtek.com/products/productsView.aspx?Langid=1&PNid=21&PFid=48&Level=5&Conn=4&ProdID=226
@@ -31,8 +32,11 @@ Ten pakiet zawiera modul + firmware dla sterownika rtl8192se pci.
 mv rtl8192se_linux_2.6.%{ver} mod
 cd mod
 %patch0 -p1
-make all
+#make all
 cd ..
+
+%build
+%build_kernel_modules -m rtl8192se_pci -C mod/
 
 %install
 rm -rf $RPM_BUILD_ROOT
