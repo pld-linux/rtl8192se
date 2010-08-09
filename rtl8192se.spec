@@ -33,7 +33,7 @@ mv rtl8192se_linux_2.6.%{ver} mod
 cd mod
 %patch0 -p1
 make all
-cd ..
+#cd ..
 
 %install
 rm -rf $RPM_BUILD_ROOT
