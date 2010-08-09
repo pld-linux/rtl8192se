@@ -1,3 +1,15 @@
+
+# PLEASE READ FOLLOWING MESSAGES:
+# http://lists.pld-linux.org/mailman/pipermail/pld-devel-en/2010-August/021751.html
+# http://lists.pld-linux.org/mailman/pipermail/pld-devel-en/2010-August/021752.html
+# http://lists.pld-linux.org/mailman/pipermail/pld-devel-en/2010-August/021753.html
+
+# Besides that, please:
+# 1) subscribe to at least one of developers mailing lists
+# 2) don't use interia for @pld-linux.org forward. interia checks SPF, so it
+#    will rejected most forwarded e-mails. Use gmail or some other mail
+#    service that does not check SPF.
+
 %define         jadro 2.6.33.5-1
 Summary:	Firmware for the RTL8192SE chipset
 %define         pname rtl8192se
