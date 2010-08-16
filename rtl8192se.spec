@@ -17,7 +17,7 @@
 Summary:	Firmware for the RTL8192SE chipset
 Name:		rtl8192se
 Version:	0017.0507.2010
-Release:	0.1
+Release:	0.2
 License:	GPL
 Group:		Base/Kernel
 #rtl8192se_linux_2.6.0017.0507.2010.tar.gzProblems in TW local tar.gz
@@ -49,9 +49,13 @@ cd HAL/rtl8192
 rm -rf $RPM_BUILD_ROOT
 
 %install_kernel_modules -m HAL/rtl8192/r8192se_pci -d kernel/drivers/net/wireless
+ 
 
-install -d $RPM_BUILD_ROOT/lib/firmware
-install firmware/RTL8192SE/*bin $RPM_BUILD_ROOT/lib/firmware
+install -d $RPM_BUILD_ROOT/lib/firmware/%{_kernel_ver}/RTL8192SE
+install firmware/RTL8192SE/*bin $RPM_BUILD_ROOT/lib/firmware/%{_kernel_ver}/RTL8192SE
+
+#install -d $RPM_BUILD_ROOT/lib/firmware
+#install firmware/RTL8192SE/*bin $RPM_BUILD_ROOT/lib/firmware
 
 #install -d $RPM_BUILD_ROOT%{_sysconfdir}/realtek
 #cp -a mod/realtek/* $RPM_BUILD_ROOT%{_sysconfdir}/realtek/
@@ -69,6 +73,6 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc firmware/RTL8192SE/Realtek-Firmware-License.txt readme.txt
-/lib/firmware/*bin
+/lib/firmware/%{_kernel_ver}/RTL8192SE/*bin
 /lib/modules/%{_kernel_ver}/kernel/drivers/net/wireless/*ko*
 #{_sysconfdir}/realtek/*
