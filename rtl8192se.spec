@@ -12,16 +12,17 @@
 %undefine       with_dist_kernel
 %endif
 
-%define         pname rtl8192se
-%define         ver %{version}
+# nothing to be placed to debuginfo package
+%define		_enable_debug_packages	0
+
+%define		pname	rtl8192se
+%define		rel		0.3
 Summary:	Firmware for the RTL8192SE chipset
 Name:		rtl8192se
 Version:	0017.0507.2010
-Release:	0.2
+Release:	%{rel}
 License:	GPL
 Group:		Base/Kernel
-#rtl8192se_linux_2.6.0017.0507.2010.tar.gzProblems in TW local tar.gz
-#Source0:	ftp://WebUser:pGL7E6v@202.134.71.21/cn/wlan/rtl8192se_linux_2.6.%{version}.tar.gz
 Source0:	http://pld.skibi.eu/%{name}_linux_2.6.%{version}.tar.gz
 # Source0-md5:	0c904bb2433699bc0e2f1d86c45a6b22
 URL:		http://www.realtek.com/products/productsView.aspx?Langid=1&PNid=21&PFid=48&Level=5&Conn=4&ProdID=226
@@ -37,6 +38,27 @@ driver.
 %description -l pl.UTF-8
 Ten pakiet zawiera modul + firmware dla sterownika rtl8192se pci.
 
+%package -n kernel%{_alt_kernel}-net-rtl8192se
+Summary:	Linux driver for rtl8192se
+Summary(pl.UTF-8):	Sterownik dla Linuksa do rtl8192se
+Release:	%{rel}@%{_kernel_ver_str}
+Group:		Base/Kernel
+Requires(post,postun):	/sbin/depmod
+%if %{with dist_kernel}
+%requires_releq_kernel
+Requires(postun):	%releq_kernel
+%endif
+
+%description -n kernel%{_alt_kernel}-net-rtl8192se
+This is driver for rtl8192se for Linux.
+
+This package contains Linux module.
+
+%description -n kernel%{_alt_kernel}-net-rtl8192se -l pl.UTF-8
+Sterownik dla Linuksa do rtl8192se.
+
+Ten pakiet zawiera moduł jądra Linuksa.
+
 %prep
 %setup -q -n %{name}_linux_2.6.%{version}
 %patch0 -p0
@@ -47,32 +69,22 @@ cd HAL/rtl8192
 
 %install
 rm -rf $RPM_BUILD_ROOT
-
 %install_kernel_modules -m HAL/rtl8192/r8192se_pci -d kernel/drivers/net/wireless
- 
 
 install -d $RPM_BUILD_ROOT/lib/firmware/%{_kernel_ver}/RTL8192SE
-install firmware/RTL8192SE/*bin $RPM_BUILD_ROOT/lib/firmware/%{_kernel_ver}/RTL8192SE
+cp -a firmware/RTL8192SE/*bin $RPM_BUILD_ROOT/lib/firmware/%{_kernel_ver}/RTL8192SE
 
-#install -d $RPM_BUILD_ROOT/lib/firmware
-#install firmware/RTL8192SE/*bin $RPM_BUILD_ROOT/lib/firmware
-
-#install -d $RPM_BUILD_ROOT%{_sysconfdir}/realtek
-#cp -a mod/realtek/* $RPM_BUILD_ROOT%{_sysconfdir}/realtek/
-
-#install -d $RPM_BUILD_ROOT%{_sysconfdir}/realtek/events
 %clean
 rm -rf $RPM_BUILD_ROOT
 
-%post
+%post	-n kernel%{_alt_kernel}-net-rtl8192se
 %depmod %{_kernel_ver}
 
-%postun
+%postun	-n kernel%{_alt_kernel}-net-rtl8192se
 %depmod %{_kernel_ver}
 
-%files
+%files -n kernel%{_alt_kernel}-net-rtl8192se
 %defattr(644,root,root,755)
 %doc firmware/RTL8192SE/Realtek-Firmware-License.txt readme.txt
 /lib/firmware/%{_kernel_ver}/RTL8192SE/*bin
 /lib/modules/%{_kernel_ver}/kernel/drivers/net/wireless/*ko*
-#{_sysconfdir}/realtek/*
