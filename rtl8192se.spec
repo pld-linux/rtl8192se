@@ -7,16 +7,18 @@
 %bcond_without  kernel          # don't build kernel modules
 %bcond_without  userspace       # don't build userspace module
 %bcond_with     verbose         # verbose build (V=1)
+%bcond_without  nolps           # DENABLE_LPS 
 
 %if %{without kernel}
 %undefine       with_dist_kernel
 %endif
 
+
 # nothing to be placed to debuginfo package
 %define		_enable_debug_packages	0
 
 %define		pname	rtl8192se
-%define		rel		1
+%define		rel		2
 Summary:	Firmware for the RTL8192SE chipset
 Name:		rtl8192se
 Version:	0017.0705.2010
@@ -27,6 +29,7 @@ Source0:	http://pld.skibi.eu/%{name}_linux_2.6.%{version}.tar.gz
 # Source0-md5:	b3ea880c34114560adeafa228b2f0735
 URL:		http://www.realtek.com/products/productsView.aspx?Langid=1&PNid=21&PFid=48&Level=5&Conn=4&ProdID=226
 Patch0:         rtl8192se-install.patch 
+Patch1:		rtl8192se-nolps.patch
 BuildRequires:	kernel%{_alt_kernel}-module-build >= 3:2.6.20
 BuildRequires:	rpmbuild(macros) >= 1.153
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -62,6 +65,10 @@ Ten pakiet zawiera moduł jądra Linuksa.
 %prep
 %setup -q -n %{name}_linux_2.6.%{version}
 %patch0 -p0
+
+%if %{without nolps}
+%patch1 -p0
+%endif
 
 %build
 cd HAL/rtl8192
