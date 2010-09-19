@@ -28,8 +28,8 @@ Group:		Base/Kernel
 Source0:	http://pld.skibi.eu/%{name}_linux_2.6.%{version}.tar.gz
 # Source0-md5:	b3ea880c34114560adeafa228b2f0735
 URL:		http://www.realtek.com/products/productsView.aspx?Langid=1&PNid=21&PFid=48&Level=5&Conn=4&ProdID=226
-Patch0:         rtl8192se-install.patch 
-Patch1:		rtl8192se-nolps.patch
+Patch0:		%{name}-install.patch
+Patch1:		%{name}-nolps.patch
 BuildRequires:	kernel%{_alt_kernel}-module-build >= 3:2.6.20
 BuildRequires:	rpmbuild(macros) >= 1.153
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
