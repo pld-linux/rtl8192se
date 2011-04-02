@@ -18,15 +18,15 @@
 %define		_enable_debug_packages	0
 
 %define		pname	rtl8192se
-%define		rel		2
+%define		rel		1
 Summary:	Firmware for the RTL8192SE chipset
 Name:		rtl8192se
-Version:	0017.0705.2010
+Version:	0019.1207.2010
 Release:	%{rel}
 License:	GPL
 Group:		Base/Kernel
 Source0:	http://pld.skibi.eu/%{name}_linux_2.6.%{version}.tar.gz
-# Source0-md5:	b3ea880c34114560adeafa228b2f0735
+# Source0-md5:	2c122c209784452fd5bbbad3ef1f7fa1
 URL:		http://www.realtek.com/products/productsView.aspx?Langid=1&PNid=21&PFid=48&Level=5&Conn=4&ProdID=226
 Patch0:		%{name}-install.patch
 Patch1:		%{name}-nolps.patch
