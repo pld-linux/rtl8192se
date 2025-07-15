@@ -64,10 +64,10 @@ Ten pakiet zawiera moduł jądra Linuksa.
 
 %prep
 %setup -q -n %{name}_linux_2.6.%{version}
-%patch0 -p0
+%patch -P0 -p0
 
 %if %{without nolps}
-%patch1 -p0
+%patch -P1 -p0
 %endif
 
 %build
